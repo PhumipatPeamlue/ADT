@@ -1,0 +1,73 @@
+int find_min(bst_t *t) {
+	while (t->left != NULL) t = t->left;
+	return t->data;
+}
+
+int find_max(bst_t *t) {
+	while (t->right != NULL) t = t->right;
+	return t->data;
+}
+
+Right rotation
+tmp1 = t
+tmp1->height--;
+t = t->left
+tmp2 = t->right
+t->right = tmp1
+t->right->left = tmp2
+
+Left rotation
+tmp1 = t
+tmp1->height--;
+t = t->right
+tmp2 = t->left
+t->left = tmp1
+t->left->right = tmp2
+
+Left-Right rotation
+t->left = Left rotation (t->left)
+t = Right rotation (t);
+
+Right-Left rotation
+t->right = Right rotation (t->right)
+t = Left rotation (t);
+
+
+int lh, rh;
+if (t->left == NULL) lh = -1;
+else lh = t->left->height;
+if (t->right == NULL) rh = -1;
+else rh = t->right->height;
+
+if (lh - rh > 1) {
+	if (t->left->left == NULL) lh = -1;
+	else lh = t->left->left->height;
+	if (t->left->right == NULL) rh = -1;
+	else rh = t->left->right->height;
+
+	if (lh > rh) {
+		t = right_rotation(t);
+	}
+	else {
+		t = leftRight_rotaion(t);
+	}
+}
+else if (rh - lh > 1) {
+	if (t->right->left == NULL) lh = -1;
+	else lh = t->right->left->height;
+	if (t->right->right == NULL) rh = -1;
+	else rh = t->right->right->height;
+
+	if (lh > rh) {
+		t = rightLeft_rotation(t);
+	}
+	else {
+		t = left_rotaion(t);
+	}
+}
+
+if (t->left == NULL) t->height = rh + 1;
+else if (t->right == NULL) t->height = lh + 1;
+else t->height = which_max(lh, rh) + 1;
+
+return t;
